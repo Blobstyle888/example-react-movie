@@ -8,16 +8,15 @@ import LayoutWithNavbar from "../layout-with-navbar";
 import { Movie, useGetMovieListQuery } from "@/store/api/movie-api";
 import { addFavorite, removeFavorite } from "@/store/feature/favorite-slice";
 import { useDispatch } from "react-redux";
+import DialogMovie from "@/components/dialog-movie";
+import { useState } from "react";
+import useDialogMovie from "@/hook/useDialogMovie";
+import useGetMovieList from "@/hook/useGetMovieList";
 
 const MoviePage: NextPage = () => {
-  const { data } = useGetMovieListQuery();
-  console.log(data?.movies);
+  const { data, addFavoriteToRedux } = useGetMovieList();
 
-  const dispatch = useDispatch();
-
-  const addFavoriteToRedux = (movie: Movie) => {
-    dispatch(addFavorite(movie));
-  };
+  const { open, handleClickOpen, handleClose } = useDialogMovie();
 
   return (
     <LayoutWithNavbar>
@@ -30,9 +29,15 @@ const MoviePage: NextPage = () => {
               <Button onClick={() => addFavoriteToRedux(movie)}>
                 Add Favorite
               </Button>
+              <Button onClick={() => handleClickOpen(movie)}>See more</Button>
             </div>
           );
         })}
+      <DialogMovie
+        // selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+      />
     </LayoutWithNavbar>
   );
 };
