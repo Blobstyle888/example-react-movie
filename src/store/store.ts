@@ -2,10 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { AuthSlice } from "./feature/auth-slice";
 import { movieApi } from "./api/movie-api";
 import { FavoriteSlice } from "./feature/favorite-slice";
+import { MovieSlice } from "./feature/movie-slice";
 
 export const store = configureStore({
   reducer: {
     auth: AuthSlice.reducer,
+    movies: MovieSlice.reducer,
     [movieApi.reducerPath]: movieApi.reducer,
     favorite: FavoriteSlice.reducer,
   },

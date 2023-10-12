@@ -29,6 +29,7 @@ export interface Movie {
   show_buyticket: string;
   trailer_cms_id: string;
   trailer_ivx_key: string;
+  isFavorite: boolean;
 }
 
 export interface RootObject {

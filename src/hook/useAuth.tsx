@@ -36,10 +36,6 @@ const useAuth = (): CustomHookAuth => {
     dispatch(login(loginParam));
 
     router.push("/movie");
-
-    console.log(emailInput.value);
-
-    console.log(passwordInput.value);
   };
 
   const onLogout = () => {

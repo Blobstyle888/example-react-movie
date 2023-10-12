@@ -1,4 +1,12 @@
-import { Button, Dialog, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Movie } from "@/store/api/movie-api";
 
 export interface DialogMovieProps {
@@ -8,43 +16,39 @@ export interface DialogMovieProps {
 }
 
 const DialogMovie = (props: DialogMovieProps) => {
-  const { onClose, open } = props;
+  const { onClose, open, selectedValue } = props;
 
   const handleClose = () => {
     onClose();
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <Button onClick={handleClose}>Close</Button>
-      {/* <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem disableGutters key={email}>
-            <ListItemButton onClick={() => handleListItemClick(email)}>
-              <ListItemAvatar>
-                <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={email} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-        <ListItem disableGutters>
-          <ListItemButton
-            autoFocus
-            onClick={() => handleListItemClick("addAccount")}
+    <Dialog open={open} fullWidth>
+      <DialogContent>
+        <img
+          src={selectedValue?.poster_url}
+          style={{ width: "100%", height: "100%" }}
+        />
+        <Typography gutterBottom variant="h5" color="primary">
+          {selectedValue?.title_th}
+        </Typography>
+        <Stack direction="column">
+          <Typography
+            gutterBottom
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontWeight: "700" }}
           >
-            <ListItemAvatar>
-              <Avatar>
-                <AddIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Add account" />
-          </ListItemButton>
-        </ListItem>
-      </List> */}
+            {selectedValue?.genre}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {selectedValue?.synopsis_th}
+          </Typography>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Close</Button>
+      </DialogActions>
     </Dialog>
   );
 };

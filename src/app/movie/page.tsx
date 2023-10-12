@@ -1,42 +1,113 @@
 "use client";
 
-import { Button } from "@mui/material";
-import { NextPage } from "next";
-import Link from "next/link";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-import LayoutWithNavbar from "../layout-with-navbar";
-import { Movie, useGetMovieListQuery } from "@/store/api/movie-api";
-import { addFavorite, removeFavorite } from "@/store/feature/favorite-slice";
-import { useDispatch } from "react-redux";
-import DialogMovie from "@/components/dialog-movie";
-import { useState } from "react";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+
 import useDialogMovie from "@/hook/useDialogMovie";
 import useGetMovieList from "@/hook/useGetMovieList";
+import { NextPage } from "next";
+import LayoutWithNavbar from "../layout-with-navbar";
+import DialogMovie from "@/components/dialog-movie";
 
 const MoviePage: NextPage = () => {
-  const { data, addFavoriteToRedux } = useGetMovieList();
+  const { data } = useGetMovieList();
 
-  const { open, handleClickOpen, handleClose } = useDialogMovie();
+  const { addFavoriteToRedux } = useGetMovieList();
+
+  const { open, selectMovie, handleClickOpen, handleClose } = useDialogMovie();
 
   return (
     <LayoutWithNavbar>
       <h2>Movie List</h2>
-      {data &&
-        data.movies.map((movie, _) => {
-          return (
-            <div key={movie.id}>
-              {movie.title_th}
-              <Button onClick={() => addFavoriteToRedux(movie)}>
-                Add Favorite
-              </Button>
-              <Button onClick={() => handleClickOpen(movie)}>See more</Button>
-            </div>
-          );
-        })}
+      {data && (
+        <Grid container spacing={2} direction="row" alignItems="stretch">
+          {data &&
+            data.map((movie, movieIndex) => {
+              return (
+                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={movie.id}>
+                  <Card sx={{ maxWidth: 345, height: "100%" }}>
+                    <CardMedia
+                      sx={{ height: 400 }}
+                      image={movie.poster_url}
+                      title={movie.title_th}
+                    />
+                    <CardContent>
+                      <Stack direction="row">
+                        <Typography
+                          gutterBottom
+                          variant="h6"
+                          component="div"
+                          color="primary"
+                          sx={{
+                            width: "100%",
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitBoxOrient: "vertical",
+                            WebkitLineClamp: 1,
+                          }}
+                        >
+                          {movie.title_th}
+                        </Typography>
+                        <IconButton
+                          onClick={() => addFavoriteToRedux(movie, movieIndex)}
+                        >
+                          {movie.isFavorite ? (
+                            <FavoriteIcon />
+                          ) : (
+                            <FavoriteBorderIcon />
+                          )}
+                        </IconButton>
+                      </Stack>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ fontWeight: "700" }}
+                      >
+                        {movie.genre}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          display: "-webkit-box",
+                          overflow: "hidden",
+                          WebkitBoxOrient: "vertical",
+                          WebkitLineClamp: 2,
+                        }}
+                      >
+                        {movie.synopsis_th}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size="small"
+                        onClick={() => handleClickOpen(movie)}
+                      >
+                        See more
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              );
+            })}
+        </Grid>
+      )}
       <DialogMovie
-        // selectedValue={selectedValue}
         open={open}
         onClose={handleClose}
+        selectedValue={selectMovie}
       />
     </LayoutWithNavbar>
   );
