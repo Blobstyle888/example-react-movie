@@ -9,6 +9,7 @@ export default function LayoutWithNavbar({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+
   const { isAuth } = useAppSelector((state) => state.auth.value);
 
   useEffect(() => {

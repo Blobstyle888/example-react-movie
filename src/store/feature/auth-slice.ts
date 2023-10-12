@@ -40,7 +40,13 @@ export const AuthSlice = createSlice({
 
       const { email, password } = action.payload;
 
-      localStorage.setItem("token", "e17ebe16-6840-11ee-8c99-0242ac120002");
+      const value = {
+        isAuth: true,
+        uid: "e17ebe16-6840-11ee-8c99-0242ac120002",
+        username: "John",
+      };
+
+      localStorage.setItem("token", JSON.stringify(value));
 
       return {
         value: {
@@ -50,9 +56,21 @@ export const AuthSlice = createSlice({
         },
       };
     },
+    getSession: (state) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const session = JSON.parse(token) as IAuth;
+        state.value = {
+          ...state.value,
+          isAuth: session.isAuth,
+          uid: session.uid,
+          username: session.username,
+        };
+      }
+    },
   },
 });
 
-export const { login, logout } = AuthSlice.actions;
+export const { login, logout, getSession } = AuthSlice.actions;
 
 export default AuthSlice.actions;
