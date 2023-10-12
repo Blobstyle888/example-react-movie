@@ -6,4 +6,9 @@
 * MUI
 
 
-![Image of Instagram](https://github.com/Blobstyle99/example-clone-instagram/blob/main/example/src/images/Screenshot.png)
+![Image of The Movie](https://github.com/Blobstyle888/example-react-movie/blob/master/src/images/Screenshot_1.png)
+
+![Image of The Movie](https://github.com/Blobstyle888/example-react-movie/blob/master/src/images/Screenshot_2.png)
+
+
+![Image of The Movie](https://github.com/Blobstyle888/example-react-movie/blob/master/src/images/Screenshot_3.png)
