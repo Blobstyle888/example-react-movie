@@ -1,4 +1,4 @@
-import MainNavbar from "@/components/main-navbar";
+import Sidebar from "@/components/sidebar";
 import { useAppSelector } from "@/store/hook";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -19,8 +19,7 @@ export default function LayoutWithNavbar({
 
   return (
     <>
-      <MainNavbar />
-      {children}
+      <Sidebar>{children}</Sidebar>
     </>
   );
 }
