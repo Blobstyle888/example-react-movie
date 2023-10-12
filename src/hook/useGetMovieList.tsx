@@ -10,7 +10,6 @@ const useGetMovieList = () => {
   useGetMovieListQuery();
   const { movies } = useAppSelector((state) => state.movies);
 
-  console.log("movies:", movies);
   const dispatch = useDispatch();
 
   const addFavoriteToRedux = (movie: Movie, movieIndex: number) => {

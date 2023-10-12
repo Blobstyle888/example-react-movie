@@ -17,7 +17,6 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getSession());
-    console.log(username);
 
     if (username) {
       router.push("/movie");
