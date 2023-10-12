@@ -1,5 +1,6 @@
 import Sidebar from "@/components/sidebar";
-import { useAppSelector } from "@/store/hook";
+import { getSession } from "@/store/feature/auth-slice";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -9,14 +10,16 @@ export default function LayoutWithNavbar({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-
-  const { isAuth } = useAppSelector((state) => state.auth.value);
+  const dispatch = useAppDispatch();
+  const { username } = useAppSelector((state) => state.auth.value);
 
   useEffect(() => {
-    if (!isAuth) {
+    dispatch(getSession());
+
+    if (!username) {
       router.push("/");
     }
-  }, [isAuth, router]);
+  }, [username, router, dispatch]);
 
   return (
     <>
