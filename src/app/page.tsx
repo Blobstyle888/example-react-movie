@@ -1,27 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Button, Card, Container, TextField } from "@mui/material";
 
 import useAuth from "@/hook/useAuth";
-import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { getSession } from "@/store/feature/auth-slice";
 
 export default function Home() {
   const { emailRef, passwordRef, onSubmitHandler } = useAuth();
-
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { username } = useAppSelector((state) => state.auth.value);
-
-  useEffect(() => {
-    dispatch(getSession());
-
-    if (username) {
-      router.push("/movie");
-    }
-  }, [username, router, dispatch]);
 
   return (
     <main style={{ height: "100vh" }}>
