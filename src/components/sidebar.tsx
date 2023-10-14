@@ -15,6 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
   CssBaseline,
+  Stack,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
@@ -23,6 +24,8 @@ import NextLink from "next/link";
 
 import useAuth from "@/hook/useAuth";
 import useCurrentPage from "@/hook/useCurrentPage";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const pages = ["Movie", "Favorite"];
 
@@ -31,6 +34,13 @@ const drawerWidth = 240;
 const MainNavbar = ({ children }: { children: React.ReactNode }) => {
   const { onLogout } = useAuth();
   const { pageName } = useCurrentPage();
+
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect(`/?callbackUrl=/movie`);
+    },
+  });
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -83,6 +93,10 @@ const MainNavbar = ({ children }: { children: React.ReactNode }) => {
           </MUILink>
         </Toolbar>
         <Divider />
+        <Stack direction="column" sx={{ m: 2 }}>
+          <Typography variant="h6">{session?.user?.name}</Typography>
+          <Typography variant="caption">{session?.user?.email}</Typography>
+        </Stack>
         <List>
           {pages.map((text, index) => (
             <ListItem key={text} disablePadding>

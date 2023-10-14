@@ -1,11 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useRef } from "react";
-import { useDispatch } from "react-redux";
-
-import { ILoginAuth, login, logout } from "@/store/feature/auth-slice";
-import { AppDispatch } from "@/store/store";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 interface CustomHookAuth {
   emailRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -20,26 +17,28 @@ const useAuth = (): CustomHookAuth => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
-
-  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const emailInput = emailRef.current!;
     const passwordInput = passwordRef.current!;
 
-    const loginParam: ILoginAuth = {
+    const res = await signIn("credentials", {
       email: emailInput.value,
       password: passwordInput.value,
-    };
+      redirect: false,
+    });
 
-    dispatch(login(loginParam));
-
-    router.push("/movie");
+    if (res?.ok) {
+      router.replace("/movie");
+    }
   };
 
   const onLogout = () => {
-    dispatch(logout());
+    signOut({
+      callbackUrl: "/",
+      redirect: true,
+    });
   };
 
   return { emailRef, passwordRef, onSubmitHandler, onLogout };

@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { AuthSlice } from "./feature/auth-slice";
 import { movieApi } from "./api/movie-api";
 import { FavoriteSlice } from "./feature/favorite-slice";
 
 export const store = configureStore({
   reducer: {
-    auth: AuthSlice.reducer,
-    [movieApi.reducerPath]: movieApi.reducer,
     favorite: FavoriteSlice.reducer,
+    [movieApi.reducerPath]: movieApi.reducer,
   },
 
   middleware: (getMiddleware) => {
