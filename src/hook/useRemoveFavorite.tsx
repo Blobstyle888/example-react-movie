@@ -1,20 +1,29 @@
 "use client";
 
+import { movieApi } from "@/store/api/movie-api";
 import { removeFavorite } from "@/store/feature/favorite-slice";
-import { setFavorite } from "@/store/feature/movie-slice";
-import { useAppSelector } from "@/store/hook";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 
 const useRemoveFavorite = () => {
   const { favoriteList } = useAppSelector((state) => state.favorite);
-  const { movies } = useAppSelector((state) => state.movies);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const removeFavoriteToRedux = (id: number) => {
-    const movieIndex = movies.findIndex((movie) => movie.id === id);
+    const setFavoriteFromCache = movieApi.util.updateQueryData(
+      "getMovieList",
+      undefined,
+      (args) => {
+        const movieIndex = args.movies.findIndex((movie) => movie.id === id);
+
+        args.movies[movieIndex] = {
+          ...args.movies[movieIndex],
+          isFavorite: !args.movies[movieIndex].isFavorite,
+        };
+      }
+    );
+    dispatch(setFavoriteFromCache);
     dispatch(removeFavorite(id));
-    dispatch(setFavorite(movieIndex));
   };
 
   return { favoriteList, removeFavoriteToRedux };

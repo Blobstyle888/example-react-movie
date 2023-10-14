@@ -1,22 +1,29 @@
 "use client";
 
-import { Movie, useGetMovieListQuery } from "@/store/api/movie-api";
+import { Movie, movieApi, useGetMovieListQuery } from "@/store/api/movie-api";
 import { addFavorite } from "@/store/feature/favorite-slice";
-import { setFavorite } from "@/store/feature/movie-slice";
-import { useAppSelector } from "@/store/hook";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
 
 const useGetMovieList = () => {
-  useGetMovieListQuery();
-  const { movies } = useAppSelector((state) => state.movies);
+  const { data: movies } = useGetMovieListQuery();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const addFavoriteToRedux = (movie: Movie, movieIndex: number) => {
     dispatch(addFavorite(movie));
-    dispatch(setFavorite(movieIndex));
+    const setFavoriteFromCache = movieApi.util.updateQueryData(
+      "getMovieList",
+      undefined,
+      (args) => {
+        args.movies[movieIndex] = {
+          ...args.movies[movieIndex],
+          isFavorite: !args.movies[movieIndex].isFavorite,
+        };
+      }
+    );
+    dispatch(setFavoriteFromCache);
   };
-  return { data: movies, addFavoriteToRedux };
+  return { data: movies ? movies.movies : [], addFavoriteToRedux };
 };
 
 export default useGetMovieList;

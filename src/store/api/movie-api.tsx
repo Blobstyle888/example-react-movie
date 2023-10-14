@@ -47,6 +47,16 @@ export const movieApi = createApi({
         url: "get_movie_avaiable",
         method: "GET",
       }),
+      transformResponse: (response: RootObject): RootObject => {
+        response.movies.forEach((movie, index) => {
+          return {
+            ...movie,
+            isFavorite: false,
+          };
+        });
+        console.log(response);
+        return response;
+      },
     }),
   }),
 });
